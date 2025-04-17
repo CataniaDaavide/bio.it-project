@@ -3,34 +3,38 @@ import { ArrowRight} from "lucide-react";
 import { Funzionalita } from "./components/funzionalita";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Footer } from "./components/footer";
-
+import ToggleTheme from "./components/toggleTheme";
 export default function Home() {
 
   return (
     <div className="w-full h-full">
+      <div className="absolute top-3 right-3">
+        <ToggleTheme />
+      </div>
+
+        {/* div1 */}
         <div
           className="w-full h-84 flex flex-col items-center justify-center gap-5 px-3"
         >
-        <p className="text-5xl font-bold bg-gradient-to-r from-purple-600 to-cyan-500 bg-clip-text text-transparent">bio.it</p>
+        <Link href="/" className="text-5xl font-bold bg-gradient-to-r from-purple-600 to-cyan-500 bg-clip-text text-transparent">bio.it</Link>
         <div className="max-w-[600px] w-full text-center">
           <p className="text-2xl text-gray-500">Una piattaforma semplice per raccogliere tutti i tuoi link in un unico posto accessibile</p>
         </div>
         <div className="flex items-center justify-center gap-3">
-          <Link href="/register" className="cursor-pointer hover:shadow-md flex gap-1 items-center bg-purple-400 px-4 py-2 rounded-lg text-sm text-white font-semibold">
+          <Link href="/register" className="cursor-pointer hover:shadow-md flex gap-1 items-center bg-purple-400 px-4 py-2 rounded-lg text-sm text-white font-bold">
             <p>Inizia ora</p>
             <ArrowRight size={15} />
           </Link>
-          <Link href="/login" className="cursor-pointer hover:shadow-md flex gap-1 items-center border border-zinc-300 px-4 py-2 rounded-lg text-sm text-black font-semibold">
+          <Link href="/login" className="cursor-pointer hover:shadow-md flex gap-1 items-center bg-zinc-700 hover:bg-zinc-900 text-white dark:bg-white dark:text-black px-4 py-2 rounded-lg text-sm font-bold">
             <p>Accedi</p>
           </Link>
         </div>
       </div>
 
+      {/* div2 */}
+      <Funzionalita/>
 
-    <Funzionalita/>
-
-
+      {/* div3 */}
       <div className="w-full flex flex-col items-center justify-center py-20 gap-5">
         <p className="text-3xl font-bold">Pronto a creare il tuo hub personale?</p>
         <div className="w-[600px] text-center">
@@ -40,8 +44,8 @@ export default function Home() {
             <p>Crea il tuo bio.it ora</p>
         </Link>
       </div>
-      <Footer/>
     </div>
   );
 }
+
 

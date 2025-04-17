@@ -6,16 +6,5 @@ export default {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
-  theme: {
-    extend: {
-      colors: {
-        // nomi personalizzati
-        secondary: {
-          light: '#cccccc', // zinc-400
-          dark: '#3f3f46',  // zinc-700
-        }
-      }
-    }
-  },
-  plugins: [require('tailwind-scrollbar-hide')],
+  plugins: [],
 };

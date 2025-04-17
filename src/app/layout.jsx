@@ -1,5 +1,7 @@
 import "./globals.css";
-
+import { ThemeProvider } from "./context/ThemeContext";
+import { Footer } from "./components/footer";
+import { UserProvider } from "./context/UserContext";
 export const metadata = {
   title: "bio.it",
   description: "Progetto realizzato da davidecatania",
@@ -7,11 +9,16 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="it" className="w-full h-full">
-      <body
-        className={`antialiased w-full h-full`}
-      >
-        {children}
+    <html lang="en" className="w-full h-full">
+      <body className="w-full h-full text-black dark:text-white bg-white dark:bg-zinc-900">
+        <UserProvider>
+        <ThemeProvider>
+          <div className="w-full h-full flex flex-col justify-between">
+          {children}
+          <Footer/>
+          </div>
+        </ThemeProvider>
+        </UserProvider>
       </body>
     </html>
   );
