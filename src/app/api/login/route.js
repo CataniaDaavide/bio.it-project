@@ -7,7 +7,6 @@ import { cookies } from "next/headers";
 export async function POST(req) {
     try {
         const { email, password } = await req.json()
-        console.log(email,password);
         
         // Connessione al database
         await connectDB();

@@ -46,9 +46,7 @@ export default function LoginPage() {
                 setUser(data.user)
                 router.push("/profile");
             } else {
-                const data = await response.json();
-                console.log(data);
-                
+                const data = await response.json();                
                 setErrore(data.message || "Errore nel login");
             }
         } catch (error) {
@@ -65,7 +63,7 @@ export default function LoginPage() {
             <InputBox data={{title:"Email",name:"email", type:"email", placeholder:"example@email.com", value:formData.email, fn:handleChange}}/>
             <InputBox data={{title:"Password",name:"password", type:"password", placeholder:"••••", value:formData.password, fn:handleChange}}/>
             {errore && <p className="text-red-500">{errore}</p>}
-            <button type="submit" className="cursor-pointer hover:shadow-md flex gap-1 items-center bg-purple-400 px-4 py-2 rounded-lg text-sm text-white font-semibold justify-center">
+            <button type="submit" className="cursor-pointer hover:shadow-md flex gap-1 items-center bg-purple-500 hover:bg-purple-500/80 px-4 py-2 rounded-lg text-sm text-white font-semibold justify-center">
                 <p>Accedi</p>
             </button>
 

@@ -1,9 +1,9 @@
 "use client"
 import { useEffect, useState } from "react";
-import { Group } from "@/app/components/group";
+import { Group, GroupPublic } from "@/app/components/group";
 import Link from "next/link";
 import ToggleTheme from "@/app/components/toggleTheme";
-import { Bio } from "@/app/components/bio";
+import { BioPublic } from "@/app/components/bio";
 import LoaderComponent from "@/app/components/loader";
 export default function Page({ params }) {
     const [user, setUser] = useState(null)
@@ -22,7 +22,7 @@ export default function Page({ params }) {
             });
 
             const data = await res.json()
-
+            
             if (res.ok) {
                 setUser(data.user)
                 setGruppi(data.user.gruppi || [])
@@ -45,9 +45,9 @@ export default function Page({ params }) {
                 </div>
 
                 <div className="w-full flex flex-col gap-3 items-center justify-center">
-                    <Bio data={user} />
+                    <BioPublic data={user} />
                     {gruppi.map((data, index) => (
-                        <Group data={data} key={index} />
+                        <GroupPublic data={data} key={index} />
                     ))}
                 </div>
             </div>

@@ -12,7 +12,8 @@ export async function POST(req) {
         // Connessione al database
         await connectDB();
 
-        let user = usersModel.findOne({email}) 
+        let user = await usersModel.findOne({email:email}) 
+        
         if (user) return new NextResponse(JSON.stringify({ message: 'Email già usata' }), { status: 500 })
 
 
