@@ -1,51 +1,22 @@
 "use client"
 import { ArrowRight } from "lucide-react";
 import { Funzionalita } from "./components/funzionalita";
-import { motion } from "framer-motion";
 import Link from "next/link";
 import ToggleTheme from "./components/toggleTheme";
-import { useContext, useEffect, useState } from "react";
-import { UserContext } from "./context/UserContext";
-import LoaderComponent from "./components/loader";
+import { AvatarComponent } from "./components/avatarComponent";
 
 export default function Home() {
-  const { user, setUser, isLoading } = useContext(UserContext)
 
   return (
-    <div className="w-full h-full">
+    <div className="w-full">
       <div className="absolute top-3 right-3 flex gap-1 items-center">
         <ToggleTheme />
-
-        <Link href={"/profile"}>
-          {
-            user
-            &&
-            <>
-              {
-                user.avatar
-                  ?
-                  <div className="w-10 h-10 cursor-pointer hover:opacity-80 rounded-full overflow-hidden border-2 border-purple-500">
-                    <img
-                      src={user.avatar}
-                      alt="avatar"
-                      className="w-full h-full object-cover object-center"
-                    />
-                  </div>
-                  :
-                  <div className="bg-purple-500/20 w-10 h-10 p-3 rounded-full flex items-center justify-center text-purple-700">
-                    <p className="text-3xl">{user.name.charAt(0).toUpperCase()}</p>
-                  </div>
-              }
-            </>
-            }
-        </Link>
+        <AvatarComponent />
       </div>
 
       {/* div1 */}
-      <div
-        className="w-full h-84 flex flex-col items-center justify-center gap-5 px-3"
-      >
-        <Link href="/" className="text-5xl font-bold bg-gradient-to-r from-purple-600 to-cyan-500 bg-clip-text text-transparent">bio.it</Link>
+      <div className="w-full h-84 flex flex-col items-center justify-center gap-5 px-3">
+        <Link href="/" className="text-7xl font-bold bg-gradient-to-r from-purple-600 to-cyan-500 bg-clip-text text-transparent">bio.it</Link>
         <div className="max-w-[600px] w-full text-center">
           <p className="text-2xl text-gray-500">Una piattaforma semplice per raccogliere tutti i tuoi link in un unico posto accessibile</p>
         </div>

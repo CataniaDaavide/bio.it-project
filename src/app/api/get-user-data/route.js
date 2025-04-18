@@ -31,7 +31,8 @@ export async function POST(req) {
       let userData = await usersModel.findOne({
         email: { $regex: new RegExp(`^${id}`, "i") }
       });
-
+      console.log(userData);
+      
       if (!userData) {
         return new NextResponse(JSON.stringify({ message: "Nessun utente trovato" }), { status: 404 });
       }
