@@ -1,9 +1,7 @@
 import Link from "next/link";
-import { useContext } from "react";
-import { UserContext } from "../context/UserContext";
-export function AvatarComponent() {
-  const { user, setUser, isLoading } = useContext(UserContext)
 
+export function AvatarComponent({data}) {
+  const user = {...data}
   return (
     <Link href={"/profile"}>
       {

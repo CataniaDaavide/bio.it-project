@@ -8,6 +8,8 @@ import updateUser from '../utils/updateUser';
 export default function GroupsCollector({ openModalFn }) {
     const { user, setUser, isLoading } = useContext(UserContext)
 
+    if(!user) return <LoaderComponent/>
+
     const deleteGroup = async (index) => {
 
         const newGruppi = [...user.gruppi];

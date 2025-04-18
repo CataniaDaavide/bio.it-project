@@ -4,14 +4,16 @@ import { Funzionalita } from "./components/funzionalita";
 import Link from "next/link";
 import ToggleTheme from "./components/toggleTheme";
 import { AvatarComponent } from "./components/avatarComponent";
+import { UserContext } from "./context/UserContext";
+import { useContext } from "react";
 
 export default function Home() {
-
+  const {user,setUser} = useContext(UserContext)
   return (
     <div className="w-full">
       <div className="absolute top-3 right-3 flex gap-1 items-center">
         <ToggleTheme />
-        <AvatarComponent />
+        {user && <AvatarComponent data={user} />}
       </div>
 
       {/* div1 */}
