@@ -91,7 +91,7 @@ export function LinkGroupPrivate({ idLink, idGruppo, deleteFn }) {
 export function LinkGroupPublic({ data }) {
     const { link, name } = data
     return (
-        <Link href={link.startsWith("http") ? value : `https://${link}`} target="_blank" className={`justify-center hover:shadow-md flex gap-3 items-center border dark:text-white border-zinc-300 dark:border-zinc-700 w-full p-3 rounded-xl text-sm text-black font-semibold`}>
+        <Link href={link.startsWith("http") ? link : `https://${link}`} target="_blank" className={`justify-center hover:shadow-md flex gap-3 items-center border dark:text-white border-zinc-300 dark:border-zinc-700 w-full p-3 rounded-xl text-sm text-black font-semibold`}>
             <p className="text-lg font-bold">{name}</p>
         </Link>
     )
