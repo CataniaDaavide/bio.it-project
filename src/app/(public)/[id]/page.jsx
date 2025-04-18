@@ -32,7 +32,7 @@ export default function Page({ params }) {
     }, [params])
 
     if (!user || !user.email) return(
-        <div className='max-w-[550px] w-full flex flex-col gap-3 py-10 p-3 items-center justify-center text-black'>
+        <div className='max-w-[550px] self-center w-full flex flex-col gap-3 py-10 p-3 items-center justify-center text-black'>
                 {/* logo e pulsanti sopra */}
                 <Nav />
             <BioSkeleton/>

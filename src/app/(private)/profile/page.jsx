@@ -10,7 +10,7 @@ import Nav from "@/app/components/nav";
 
 export default function ProfielePage() {
     const [isOpenModal, setIsOpenModal] = useState(false)
-    const [isOpenModal2, setIsOpenModal2] = useState(false)
+    const [isOpenModal2, setIsOpenModal2] = useState()
 
     return (
         <div className="w-full flex justify-center">

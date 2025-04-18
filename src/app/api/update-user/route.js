@@ -40,13 +40,13 @@ export async function POST(req) {
 
                     let trovato = false
                     if(linkData){                        
-                        gruppo.links.map((link) => {                            
-                            if(linkData.id === link.id){
-                                link = linkData
+                        gruppo.links.forEach((link, i) => {
+                            if (linkData.id === link.id) {
+                                gruppo.links[i] = linkData // assegni direttamente dentro l'array
                                 trovato = true
                             }
                         })
-
+                        
                         if(trovato === false){
                             gruppo.links.push(linkData)
                         }

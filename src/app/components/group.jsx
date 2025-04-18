@@ -1,20 +1,42 @@
 "use client"
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { Plus, Pen, X, Trash2, Check } from "lucide-react";
 import { LinkGroupPrivate, LinkGroupPublic } from "./link";
 import ButtonIcon from "./buttonIcon";
 import InputBox from "./inputBox";
 import { UserContext } from "../context/UserContext";
 import updateUser from "../utils/updateUser";
+import LoaderComponent from "./loader";
 
 
-export function GroupPrivate({ data, deleteFn, openModalFn }) {
-    const { user, setUser } = useContext(UserContext)
+export function GroupPrivate({ idGruppo, deleteFn, openModalFn }) {
+    const { user, setUser, isLoading } = useContext(UserContext)
+    const gruppo = user.gruppi.filter((g) => g.id === idGruppo)[0]
     const [titleChange, setTitleChange] = useState(false)
-    const { id } = data
-    const [title, setTitle] = useState(data.title)
-    const [links, setLinks] = useState(data.links)
+    const [title, setTitle] = useState(gruppo.title)
+    const [links, setLinks] = useState(gruppo.links)
     const [newTitle, setNewTitle] = useState(title)
+
+    useEffect(() => {
+        setTitle(gruppo.title)
+        setLinks(gruppo.links)       
+    },[user])
+
+    if(isLoading){
+        return <LoaderComponent/>
+    }
+    const deleteLink = async (index) => {} //TODO:
+    // const deleteLink = async (index) => {
+
+    //     const newLinks = [...links];
+    //     newLinks.splice(index, 1); // rimuovi il gruppo in posizione `index`
+
+    //     const res = await updateUser({ email: user.email, gruppi: newGruppi })
+    //     if (res.ok) {
+    //         const data = await res.json()
+    //         setUser({ ...data.user})
+    //     }
+    // }
 
     const handleChange = (e) => {
         e.preventDefault()
@@ -22,7 +44,7 @@ export function GroupPrivate({ data, deleteFn, openModalFn }) {
     }
     const hadleConfirm = async (e) => {
         e.preventDefault()
-        const res = await updateUser({ email: user.email, idGruppo: id, titleGruppo: newTitle })
+        const res = await updateUser({ email: user.email, idGruppo, titleGruppo: newTitle })
         if (res.ok) {
             const data = await res.json()
             setUser({ ...data.user })
@@ -65,22 +87,18 @@ export function GroupPrivate({ data, deleteFn, openModalFn }) {
 
             </div>
             {
-                links.map((item, index) => {
+                links.map((link, index) => {
                     return (
                         <LinkGroupPrivate
                             key={index}
-                            data={item}
-                            idGruppo={id}
-                            deleteFn={() => {
-                                const newLinks = [...links];
-                                newLinks.splice(index, 1); // rimuovi il gruppo in posizione `index`
-                                setLinks(newLinks);
-                            }} />
+                            idLink={link.id}
+                            idGruppo={idGruppo}
+                            deleteFn={() => { deleteLink(index)}} />
                     )
                 })
             }
 
-            <button onClick={() => { openModalFn(id) }} className="cursor-pointer hover:bg-purple-500 hover:border-purple-500 shadow-md flex gap-3 items-center justify-center border border-dashed border-zinc-300 dark:border-zinc-700 w-full px-4 py-2 rounded-lg text-sm text-black dark:text-white font-semibold">
+            <button onClick={() => { openModalFn(idGruppo) }} className="cursor-pointer hover:bg-purple-500 hover:border-purple-500 shadow-md flex gap-3 items-center justify-center border border-dashed border-zinc-300 dark:border-zinc-700 w-full px-4 py-2 rounded-lg text-sm text-black dark:text-white font-semibold">
                 <Plus size={20} />
                 <p>Add New Link</p>
             </button>

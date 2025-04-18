@@ -13,7 +13,7 @@ export default function RootLayout({ children }) {
       <body className="w-full h-full text-black dark:text-white bg-white dark:bg-zinc-900">
         <UserProvider>
         <ThemeProvider>
-          <div className="w-full h-full flex flex-col justify-between">
+          <div className="w-full flex flex-col justify-between">
           {children}
           <Footer/>
           </div>

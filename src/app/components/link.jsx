@@ -1,17 +1,27 @@
 import { Pen, Trash2, SquareArrowOutUpRight, Check, X, Group } from "lucide-react";
 import Link from "next/link";
 import ButtonIcon from "./buttonIcon";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import InputBox from "./inputBox";
 import { UserContext } from "../context/UserContext";
 import updateUser from "../utils/updateUser";
 
-export function LinkGroupPrivate({ data, idGruppo, deleteFn }) {
-    const {user, setUser} = useContext(UserContext)
-    const [isEdit, setIsEdit] = useState(false)    
-    const {id, name, link } = data
-    const [linkData, setLinkData] = useState({ id, name, link })
+export function LinkGroupPrivate({ idLink, idGruppo, deleteFn }) {
+    const { user, setUser, isLoading } = useContext(UserContext)
+    const link = user.gruppi.filter((g) => g.id === idGruppo)[0].links.filter((l) => l.id === idLink)[0]
+    console.log(link);
+
+    const [isEdit, setIsEdit] = useState(false)
+    const [linkData, setLinkData] = useState({ id: link.id, name: link.name, link: link.link })
     const [newLinkData, setNewLinkData] = useState(linkData)
+
+    useEffect(() => {
+        setLinkData({ id: link.id, name: link.name, link: link.link })
+    }, [user])
+
+    if (isLoading) {
+        return <LoaderComponent />
+    }
 
     const handleChange = (e) => {
         e.preventDefault()
@@ -22,7 +32,7 @@ export function LinkGroupPrivate({ data, idGruppo, deleteFn }) {
     const hadleConfirm = async (e) => {
         e.preventDefault()
 
-        const res = await updateUser({ email: user.email, idGruppo , linkData:newLinkData })
+        const res = await updateUser({ email: user.email, idGruppo, linkData: newLinkData })
         if (res.ok) {
             const data = await res.json()
             setUser({ ...data.user })
@@ -64,12 +74,15 @@ export function LinkGroupPrivate({ data, idGruppo, deleteFn }) {
                             <ButtonIcon icon={<X />} fn={hadleNotConfirm} />
                         </>
                         :
-                        <ButtonIcon icon={<Pen />} fn={() => { setIsEdit(true) }} />
+                        <>
+                            <ButtonIcon icon={<Pen />} fn={() => { setIsEdit(true) }} />
+                            <Link href={linkData.link.startsWith("http") ? link : `https://${linkData.link}`} target="_blank">
+                                <ButtonIcon icon={<SquareArrowOutUpRight />} />
+                            </Link>
+                            <ButtonIcon icon={<Trash2 />} fn={deleteFn} />
+                        </>
                 }
-                <Link href={link.startsWith("http") ? link : `https://${link}`} target="_blank">
-                    <ButtonIcon icon={<SquareArrowOutUpRight />} />
-                </Link>
-                <ButtonIcon icon={<Trash2 />} fn={deleteFn} />
+
             </div>
         </div>
     )
