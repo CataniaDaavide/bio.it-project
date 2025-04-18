@@ -1,13 +1,17 @@
 "use client"
 import { useContext, useState } from "react";
 import { Plus, Pen, X, Trash2, Check } from "lucide-react";
-import { LinkGroup } from "./link";
+import { LinkGroupPrivate, LinkGroupPublic } from "./link";
 import ButtonIcon from "./buttonIcon";
 import InputBox from "./inputBox";
 import { UserContext } from "../context/UserContext";
+import updateUser from "../utils/updateUser";
+
 
 export function GroupPrivate({ data, deleteFn, openModalFn }) {
+    const { user, setUser } = useContext(UserContext)
     const [titleChange, setTitleChange] = useState(false)
+    const { id } = data
     const [title, setTitle] = useState(data.title)
     const [links, setLinks] = useState(data.links)
     const [newTitle, setNewTitle] = useState(title)
@@ -16,11 +20,18 @@ export function GroupPrivate({ data, deleteFn, openModalFn }) {
         e.preventDefault()
         setNewTitle(e.target.value)
     }
-    const hadleConfirm = (e) => {
+    const hadleConfirm = async (e) => {
         e.preventDefault()
-        setTitle(newTitle)
+        const res = await updateUser({ email: user.email, idGruppo: id, titleGruppo: newTitle })
+        if (res.ok) {
+            const data = await res.json()
+            setUser({ ...data.user })
+            setTitle(newTitle)
+        }
         setTitleChange(false)
     }
+
+
     const hadleNotConfirm = (e) => {
         e.preventDefault()
         setNewTitle(title)
@@ -55,16 +66,21 @@ export function GroupPrivate({ data, deleteFn, openModalFn }) {
             </div>
             {
                 links.map((item, index) => {
-                    return <LinkGroup data={item} editMode={editMode} key={index}
-                        deleteFn={() => {
-                            const newLinks = [...links];
-                            newLinks.splice(index, 1); // rimuovi il gruppo in posizione `index`
-                            setLinks(newLinks);
-                        }} />
+                    return (
+                        <LinkGroupPrivate
+                            key={index}
+                            data={item}
+                            idGruppo={id}
+                            deleteFn={() => {
+                                const newLinks = [...links];
+                                newLinks.splice(index, 1); // rimuovi il gruppo in posizione `index`
+                                setLinks(newLinks);
+                            }} />
+                    )
                 })
             }
 
-            <button onClick={() => { openModalFn(true) }} className="cursor-pointer hover:bg-purple-500 hover:border-purple-500 shadow-md flex gap-3 items-center justify-center border border-dashed border-zinc-300 dark:border-zinc-700 w-full px-4 py-2 rounded-lg text-sm text-black dark:text-white font-semibold">
+            <button onClick={() => { openModalFn(id) }} className="cursor-pointer hover:bg-purple-500 hover:border-purple-500 shadow-md flex gap-3 items-center justify-center border border-dashed border-zinc-300 dark:border-zinc-700 w-full px-4 py-2 rounded-lg text-sm text-black dark:text-white font-semibold">
                 <Plus size={20} />
                 <p>Add New Link</p>
             </button>
@@ -73,40 +89,21 @@ export function GroupPrivate({ data, deleteFn, openModalFn }) {
     )
 }
 
-export function GroupPublic({ data, deleteFn, openModalFn }) {
-    const [titleChange, setTitleChange] = useState(false)
-    const [title, setTitle] = useState(data.title)
-    const [links, setLinks] = useState(data.links)
-    const [newTitle, setNewTitle] = useState(title)
-
-    const handleChange = (e) => {
-        e.preventDefault()
-        setNewTitle(e.target.value)
-    }
-    const hadleConfirm = (e) => {
-        e.preventDefault()
-        setTitle(newTitle)
-        setTitleChange(false)
-    }
-    const hadleNotConfirm = (e) => {
-        e.preventDefault()
-        setNewTitle(title)
-        setTitleChange(false)
-    }
-
+export function GroupPublic({ data }) {
+    const { title, links } = data
     return (
         <div className="flex flex-col gap-3 justify-center w-full p-3 rounded-xl border border-zinc-300 dark:border-zinc-700 text-black dark:text-white shadow-md">
-            <div className="flex items-center justify-center gap-3 cursor-pointer">
+            <div className="flex items-center justify-start gap-3 cursor-pointer">
                 <p className="text-2xl font-bold">{title}</p>
             </div>
             {
                 links.map((item, index) => {
-                    return <LinkGroup data={item} editMode={editMode} key={index}
-                        deleteFn={() => {
-                            const newLinks = [...links];
-                            newLinks.splice(index, 1); // rimuovi il gruppo in posizione `index`
-                            setLinks(newLinks);
-                        }} />
+                    return (
+                        <LinkGroupPublic
+                            data={item}
+                            key={index}
+                        />
+                    )
                 })
             }
         </div>
@@ -128,26 +125,17 @@ export function ModalGroupComponent({ closeModal }) {
         const gruppi = [...user.gruppi]
         gruppi.push(
             {
-
+                "id": crypto.randomUUID(),
                 "title": input,
                 "links": []
             }
         )
-
-        const url = `/api/update-user`;
-        const options = {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ email: user.email, gruppi }),
-        };
-        const res = await fetch(url, options)
+        const res = await updateUser({ email: user.email, gruppi })
         if (res.ok) {
             const data = await res.json()
-            setUser({ ...user, "gruppi": gruppi })
-            closeModal()
+            setUser({ ...data.user })
         }
+        closeModal()
     }
 
 

@@ -5,6 +5,7 @@ import ButtonIcon from "./buttonIcon"
 import InputBox from "./inputBox"
 import { UserContext } from "../context/UserContext"
 import LoaderComponent from "./loader"
+import updateUser from "../utils/updateUser"
 
 export function BioPrivate() {
     const [isEdit, setIsEdit] = useState(false)
@@ -26,22 +27,12 @@ export function BioPrivate() {
     const hadleConfirm = async (e) => {
         e.preventDefault()
 
-        const url = `/api/update-user`;
-        const options = {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ email: newUser.email, description: newUser.description, name: newUser.name, avatar: newUser.avatar }),
-        };
-        const res = await fetch(url, options)
-        if (res.ok) {
+        const res = await updateUser({ email: newUser.email, description: newUser.description, name: newUser.name, avatar: newUser.avatar })
+        if(res.ok){
             const data = await res.json()
-            setUser(newUser)
-            setIsEdit(false)
+            setUser({...data.user})
         }
-
-
+        setIsEdit(false)
     }
     const hadleNotConfirm = (e) => {
         e.preventDefault()
@@ -131,10 +122,9 @@ export function BioPublic({ data }) {
 }
 
 
-function BioSkeleton() {
+export function BioSkeleton() {
     return (
         <div className="relative text-black dark:text-white flex flex-col gap-3 items-center text-center justify-center w-full p-5 rounded-xl border border-zinc-300 dark:border-zinc-700 shadow-md">
-
             <div className="bg-purple-500/20 w-24 h-24 p-3 rounded-full flex items-center justify-center text-purple-700" />
             <div className="w-full flex flex-col gap-2 items-center justify-center">
                 <p className="text-2xl font-bold w-58 h-5 rounded-lg bg-zinc-200 dark:bg-zinc-800 animate-pulse" />

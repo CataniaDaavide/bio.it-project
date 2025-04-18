@@ -1,9 +1,8 @@
 "use client"
 import { useEffect, useState } from "react";
-import { Group, GroupPublic } from "@/app/components/group";
-import Link from "next/link";
-import ToggleTheme from "@/app/components/toggleTheme";
-import { BioPublic } from "@/app/components/bio";
+import {GroupPublic } from "@/app/components/group";
+import Nav from "@/app/components/nav";
+import { BioPublic, BioSkeleton } from "@/app/components/bio";
 import LoaderComponent from "@/app/components/loader";
 export default function Page({ params }) {
     const [user, setUser] = useState(null)
@@ -33,19 +32,25 @@ export default function Page({ params }) {
     }, [params])
 
     if (!user || !user.email) return(
-        <LoaderComponent/>
+        <div className='max-w-[550px] w-full flex flex-col gap-3 py-10 p-3 items-center justify-center text-black'>
+                {/* logo e pulsanti sopra */}
+                <Nav />
+            <BioSkeleton/>
+        </div>
     )
 
     return (
         <div className="w-full flex justify-center">
             <div className='max-w-[550px] w-full flex flex-col gap-3 py-10 p-3 items-center justify-center text-black'>
-                <div className="w-full flex items-center justify-between">
-                    <Link href="/" className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-cyan-500 bg-clip-text text-transparent">bio.it</Link>
-                    <ToggleTheme />
-                </div>
+                
+                {/* logo e pulsanti sopra */}
+                <Nav />
 
                 <div className="w-full flex flex-col gap-3 items-center justify-center">
+                    {/* card bio */}
                     <BioPublic data={user} />
+
+                    {/* lista dinamica di gruppi */}
                     {gruppi.map((data, index) => (
                         <GroupPublic data={data} key={index} />
                     ))}

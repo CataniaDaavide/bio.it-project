@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(req) {
     try{
-        const {email, description,name,avatar, gruppi} = await req.json()
+        const {email, description,name,avatar, gruppi, idGruppo, titleGruppo, linkData} = await req.json()
                 
         await connectDB()
 
@@ -30,7 +30,32 @@ export async function POST(req) {
         if(gruppi){
             user.gruppi = gruppi
         }
+        
+        if(idGruppo){
+            user.gruppi.map((gruppo) => {
+                if(idGruppo === gruppo.id){
+                    if(titleGruppo){
+                        gruppo.title = titleGruppo
+                    }
 
+                    let trovato = false
+                    if(linkData){                        
+                        gruppo.links.map((link) => {                            
+                            if(linkData.id === link.id){
+                                link = linkData
+                                trovato = true
+                            }
+                        })
+
+                        if(trovato === false){
+                            gruppo.links.push(linkData)
+                        }
+                    }
+   
+                }
+            })
+        }
+                
         user.save()
 
         const userData = user.toObject()

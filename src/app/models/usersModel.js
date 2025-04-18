@@ -9,8 +9,10 @@ const usersSchema = new mongoose.Schema({
     avatar: { type: String, required: false },
     password: { type: String, required: true },
     gruppi: [{
+        id: { type: String, required: true },
         title: { type: String, required: true },
         links: [{
+            id: { type: String, required: true},
             name: { type: String, required: true},
             link: { type: String, required: true},
         }]
